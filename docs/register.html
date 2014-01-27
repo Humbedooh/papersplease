@@ -1,0 +1,12 @@
+<h4>Register an account</h4>
+<p>Enter your desired username and password to register an account.<br/>
+Your full name and email address is optional, but it might help you get your talk submitted.</p>
+<form action="/register" method="POST">
+  <input name="username" type="text" value="{{username}}" placeholder="Enter your desired username" style="width: 300px;"/><br/>
+  <input name="password" type="password" value="{{password}}" placeholder="Enter a password" style="width: 300px;"/><br/>
+  <input name="fullname" type="text" value="{{fullname}}" placeholder="[optional] Enter your name" style="width: 300px;"/><br/>
+  <input name="email" type="text" value="{{email}}" placeholder="[optional] Enter your email address" style="width: 300px;"/><br/>
+  <input type="hidden" name="action" value="register"/>
+  <input type="submit" value="Register account"/>
+  <h4>{{error}}</h4>
+</form>

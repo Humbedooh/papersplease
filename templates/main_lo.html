@@ -1,0 +1,156 @@
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html lang="en">
+  <meta charset="utf8"/>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}} - PapersPlease!</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+    <meta name="description" content="System for managing Call for Proposals" />
+    <meta name="author" content="Apache Software Foundation" />
+    <meta name="copyright" content="Copyright (c) 2014, Apache Software Foundation - Licensed under the Apache Software License v/2.0" />
+    <link href='/css/foundation.css' rel='stylesheet' />
+    
+  </head>
+  <body class="antialiased hide-extras">
+    <div class="marketing off-canvas-wrap">
+      <div class="inner-wrap">
+
+
+<nav class="top-bar docs-bar hide-for-small" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="/"> &nbsp; PapersPlease!</a></h1>
+    
+    </li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="right">
+      <li class="has-dropdown">
+        <a href="#" style="color: #9CF;" id="username">Welcome, {{user}}!</a>
+        <ul class="dropdown">
+          <li><a href="/user/dashboard">Dashboard</a></li>
+          <li><a href="/user/email">Read messages</a></li>
+          <li><a href="/user/profile">Edit profile</a></li>
+          <li><a href="/logoff">Log off</a></li>
+        </ul>
+      </li>
+      <li class="divider"></li>
+      <li class="has-dropdown">
+        <a href="#" class="">Events</a>
+        <ul class="dropdown">
+          <li><a href="/events/ongoing">Ongoing events</a></li>
+          <li><a href="/events/upcoming">Upcoming events</a></li>
+        </ul>
+      </li>
+      <li class="divider"></li>
+      <li class="has-dropdown">
+        <a href="#" class="">CFPs</a>
+        <ul class="dropdown">
+          <li><a href="/cfp/submit">Submit a talk!</a></li>
+          <li><a href="/cfp/guide">How to write a proper CFP</a></li>
+        </ul>
+      </li>
+      <li class="divider"></li>
+      <li>
+        <a href="/about" class="">About this site</a>
+      </li>
+      
+    </ul>
+  </section>
+</nav>
+<nav class="tab-bar show-for-small">
+  <a class="left-off-canvas-toggle menu-icon">
+    <span>Foundation</span>
+  </a>
+</nav>
+
+
+<a class="exit-off-canvas" href="#"></a>
+
+
+        <section role="main">
+
+          <div class="row">
+            <div class="large-3 medium-4 columns">
+              <div class="hide-for-small">
+              <div class="sidebar">
+  <h5>Call for Proposals</h5>
+  <form action="/search" method="GET">
+    <input tabindex="1" id="autocomplete" name="query" type="search" placeholder="Search this site:">
+  </form>
+
+  <nav>
+    <ul class="side-nav">
+      <li class="heading"><strong>Upcoming events</strong></li>
+      <li><a href="#">Some event</a></li>
+      <li><a href="#">Some other event</a></li>
+      <li class="divider"></li>
+      
+      <li class="heading"><strong>Useful links</strong></li>
+      <li><a href="#">How to write a good CFP</a></li>
+      <li><a href="#">Troubleshooting guide</a></li>
+      <li class="divider"></li>
+      
+    </ul>
+  </nav>
+
+
+</div>  
+              </div>
+            </div>
+            <div class="large-9 medium-8 columns">
+              {{output}}
+            </div>
+          </div>
+
+<div class="zurb-footer-bottom">
+  <div class="row">
+    <div class="medium-4 medium-4 push-8 columns">
+     </div>
+     <div class="medium-8 medium-8 pull-4 columns">
+        
+       <p class="copyright">&copy; {{year}} the Apache Software Foundation</p>
+    </div>          
+  </div>
+</div>
+        </section>
+
+      </div>
+    </div>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/foundation.min.js"></script>
+    <script src="/js/modernizr.js"></script>
+    <script>
+            $(document).foundation();            
+    </script>
+    <script type="text/javascript">
+      function keyHandler(obj,e) {
+          var TABKEY = 9;
+          if(e.keyCode == TABKEY) {
+              obj.value += "    ";
+              if(e.preventDefault) {
+                  e.preventDefault();
+              }
+              return false;
+          }
+      }
+      function onKeyUp(obj, e) {
+        var data = new FormData();
+        data.append('md', obj.value);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/md.lua', true);
+        xhr.onload = function () {
+          document.getElementById('md').innerHTML = this.responseText;
+        };
+        xhr.send(data);
+      }
+      var ur = parseInt({{emails}});
+      if (ur > 0) {
+        var usr = document.getElementById('username');
+        usr.innerHTML += " (<span style='color: #FF0;'>" + ur + "</span>)";
+      }
+    </script>
+  </body>
+</html>
