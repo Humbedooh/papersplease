@@ -1,0 +1,32 @@
+
+<table>
+    <tr>
+        <td>
+            <form action="/cfp/review?event={{event}}&talk={{talk}}" method="POST">
+                <h5>Voting:</h5>
+                <label for="vote"><b>Leave a vote:</b></label>
+                <select name="vote" id="vote">
+                    <option value="none">---------------------</option>
+                    <option value="2">Strongly approve (+2)</option>
+                    <option value="1">Approve (+1)</option>
+                    <option value="0">I have no opinion (0)</option>
+                    <option value="-1">Disapprove (-1)</option>
+                    <option value="-2">Strongly disapprove (-2)</option>
+                </select>
+                <input type="submit" value="Cast vote"/>
+                <br/>
+                You can change your vote at any time. You only have one vote, so casting another just changes your initial vote.
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <form action="/cfp/review?event={{event}}&talk={{talk}}" method="POST">
+                <h5>Add a comment:</h5>
+                <textarea name="comment" style='width: 600px; height: 200px;'></textarea><br/>
+                <input type="checkbox" name="share" value="yes" id="share"/><label for="share">Share this comment with the speaker</label><br/>
+                <input type="submit" value="Add comment"/>
+            </form>
+        </td>
+    </tr>
+</table>

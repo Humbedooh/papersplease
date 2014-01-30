@@ -1,0 +1,10 @@
+<form action="/events/manage?event={{event}}&p=types" method="POST">
+<h4>Current submission types:</h4>
+{{list}}
+
+<h4>Add a submission type:</h4>
+<input type="text" name="title" placeholder="Enter the name of the submission type" style="width:300px;"/><br/>
+<input type="text" name="description" placeholder="Enter a short description of the type" style="width:300px;"/><br/>
+<input type="number" name="duration"  placeholder="Enter a duration in minutes" style="width:300px;"/><br/>
+<input type="submit" value="Save submission type"/>
+</form>

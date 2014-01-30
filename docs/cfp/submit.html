@@ -1,0 +1,73 @@
+<h2>Submit a new talk for {{etitle}}:</h2>
+<h3 style="color: #D40;">{{err}}</h3>
+<p>{{edesc}}</p>
+<form action="/cfp/submit?e={{id}}" method="POST">
+    <input type="hidden" name="action" value="submit"/>
+<table style="width: 800px;">
+<tr><th>Title:</th><td><input type="text" placeholder="Enter the title of your talk here" name="title" value="{{title}}" /></td></tr>
+<tr><th>Type:</th><td>
+    <select name="type" id="type">
+        {{types}}
+    </select>
+</td></tr>
+<tr><th>Category:</th><td><input type="text" placeholder="Enter a category that fits your talk" name="category" value="{{category}}" /></td></tr>
+<tr><th>Difficulty level:</th><td>
+    <select name="difficulty" id="difficulty">
+        <option value="1">Beginner</option>
+        <option value="2">Intermediate</option>
+        <option value="3">Advanced</option>
+    </select>
+</td></tr>
+<tr><th>Speaker bio:</th><td>
+    <textarea id="bio_field" maxlength="1000" style="width: 600px; height: 200px;" name="bio" onkeyup="calc(this, 'bio');" onchange="calc(this, 'bio');">{{bio}}</textarea><br/>
+    <span id='bio'>You have 1000 characters left</span>
+</td></tr>
+<tr><th>Abstract:</th><td>
+    <textarea id="abstract_field" maxlength="1000" style="width: 600px; height: 200px;" name="abstract" onkeyup="calc(this, 'abstract');" onchange="calc(this, 'abstract');">{{abstract}}</textarea><br/>
+    <span id='abstract'>You have 1000 characters left</span>
+</td></tr>
+<tr><th>Intended audience:</th><td>
+    <textarea id="audience_field" maxlength="1000" style="width: 600px; height: 200px;" name="audience" onkeyup="calc(this, 'audience');" onchange="calc(this, 'audience');">{{audience}}</textarea><br/>
+    <span id='audience'>You have 1000 characters left</span>
+</td></tr>
+<tr><th>Benefits to the ecosystem:</th><td>
+    <textarea id="eco_field" maxlength="1000" style="width: 600px; height: 200px;" name="eco" onkeyup="calc(this, 'eco');" onchange="calc(this, 'eco');">{{eco}}</textarea><br/>
+    <span id='eco'>You have 1000 characters left</span>
+</td></tr>
+<tr><th>Options:</th><td><input type="checkbox" name="anonymous" value="1" id="anon"/><label for="anon">Keep this submission anonymous.</label></td></tr>
+<tr><td colspan="2"><input type="submit" value="Submit talk"/></td></tr>
+</table>
+
+<!-- script for setting the right html properties for saved variables -->
+<script>
+    var al = parseInt({{difficulty}});
+    if (al && al > 0) {
+        var list = document.getElementById('difficulty');
+        list.value = al;
+    }
+    
+    var an = parseInt({{anonymous}});
+    if (an && an > 0) {
+        var check = document.getElementById('anon');
+        check.checked = true;
+    }
+    
+    var ty = parseInt({{type}});
+    if (ty && ty > 0) {
+        var typ = document.getElementById('type');
+        typ.value = ty;
+    }
+    
+    function calc(obj, name) {
+        if (obj) {
+            var left = 1000 - obj.value.length;
+            var span = document.getElementById(name);
+            span.innerHTML = "You have " + left + " characters left.";
+        }
+    }
+    
+    calc(document.getElementById('abstract_field'), 'abstract');
+    calc(document.getElementById('bio_field'), 'bio');
+    calc(document.getElementById('audience_field'), 'audience');
+    calc(document.getElementById('eco_field'), 'eco');
+</script>

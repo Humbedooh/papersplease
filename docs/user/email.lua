@@ -44,7 +44,7 @@ if not (get['i'] or get['r'] or get['c'] or get['a'] or get['d']) then
     if get['s'] and get['s'] == "1" then
         print[[<h4>Your email was sent!</h4>]]
     end
-    print[[<h3>Emails:</h3><table style="width: 800px;"><thead><tr><th>Date</th><th>Sender</th><th>Subject</th><th>Actions</th></tr></thead><tbody>]]
+    print[[<h3>Emails:</h3>[<a href="/user/email?c=0">Compose</a>]<br/><table style="width: 800px;"><thead><tr><th>Date</th><th>Sender</th><th>Subject</th><th>Actions</th></tr></thead><tbody>]]
     local p = tonumber(get['p'] or 0) or 0
     local t = p * 20
     local prep, err = db:prepare(r, "SELECT `mid`, `sender`, `date`, `subject`, `unread` FROM `emails` WHERE `recipient` = %u ORDER BY `mid` DESC LIMIT %u, 21 ")

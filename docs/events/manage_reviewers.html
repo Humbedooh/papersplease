@@ -1,0 +1,13 @@
+&larr; <a href="/events/manage?event={{event}}">Back to management portal</a><br/>
+<form action="/events/manage?event={{event}}&p=reviewers" method="POST">
+<h3>Current reviewers:</h3>
+{{list}}
+
+<h3>Add a reviewer:</h3>
+<h4 style="color: #D50;">{{err}}</h4>
+<input type="text" name="user" placeholder="Enter the username of the reviewer" style="width:300px;"/><br/>
+To allow access to all contents, please enter the value "*" below. To allow access to a specific content type, 
+use a comma separated list of areas the reviewer has access to.
+<input type="text" name="category" placeholder="Enter which categories the user has access to review" value="*" style="width:300px;"/><br/>
+<input type="submit" value="Add reviewer"/>
+</form>

@@ -1,0 +1,21 @@
+<form action="/events/create" method="POST">
+    <h3>General information:</h3>
+    <b>Title:</b> <input type="text" name="title" placeholder="Enter the title of the event"/><br/>
+    <b>Location:</b> <input type="text" name="location" placeholder="Enter the location of the event"/><br/>
+    <b>Description:</b> <textarea name="description"></textarea><br/>
+    <b>Event starts:</b><input type="datetime" id="starts" name="starts" placeholder="Enter a date"/><br/>
+    <b>Event ends:</b><input type="datetime" id="ends" name="ends" placeholder="Enter a date"/><br/><br/>
+    
+<b>CFP Closes: </b><input type="datetime" id="closes" name="closes" placeholder="Enter the date when CFP closes"/><br/>
+<b>Papers approved:</b><input type="datetime" id="resolves" name="resolves" placeholder="Enter the date when papers are approved"/>
+<input type="submit" value="Create event">
+</form>
+ <script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+    $(function () {
+        $('#starts').fdatepicker({format: 'yyyy-mm-dd' });
+        $('#ends').fdatepicker({format: 'yyyy-mm-dd' });
+        $('#closes').fdatepicker({format: 'yyyy-mm-dd' });
+        $('#resolves').fdatepicker({format: 'yyyy-mm-dd' });
+    })();
+</script>

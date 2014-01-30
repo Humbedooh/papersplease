@@ -1,0 +1,30 @@
+[<a href="/events/manage?event={{event}}">Back to management oversight</a>]
+<h4 style="color: #693;">{{err}}</h4>
+<form action="/events/manage?event={{event}}&p=basic" method="POST">
+    <h3>Edit event:</h3>
+    <b>Status:</b> <select name="open" id="ofb"><option value="0">Private</option><option value="1">Public</option></select>
+    <b>Title:</b> <input type="text" name="title" value="{{title}}"/><br/>
+    <b>Location:</b> <input type="text" name="location"  value="{{location}}"/><br/>
+    <b>Description:</b> <textarea name="description">{{description}}</textarea><br/>
+    <b>Event starts:</b><input type="datetime" id="starts" name="starts"  value="{{starts}}"/><br/>
+    <b>Event ends:</b><input type="datetime" id="ends" name="ends" value="{{ends}}"/><br/><br/>
+    
+<b>CFP Closes: </b><input type="datetime" id="closes" name="closes" value="{{closes}}"/><br/>
+<b>Papers approved:</b><input type="datetime" id="resolves" name="resolves" value="{{resolves}}"/>
+<input type="submit" value="Save event">
+</form>
+ <script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+    var ofb = parseInt({{open}});
+    if (ofb && ofb >= 0) {
+        var ol = document.getElementById('ofb');
+        ol.value = ofb;
+    }
+    
+    $(function () {
+        $('#starts').fdatepicker({format: 'yyyy-mm-dd' });
+        $('#ends').fdatepicker({format: 'yyyy-mm-dd' });
+        $('#closes').fdatepicker({format: 'yyyy-mm-dd' });
+        $('#resolves').fdatepicker({format: 'yyyy-mm-dd' });
+    })();
+</script>

@@ -8,6 +8,45 @@ function print(...)
     output = output .. table.concat({...}, "")
 end
 
+function parseymd(txt)
+    local y,m,d = txt:match("(%d+)-(%d+)-(%d+)")
+    if y and m and d then
+        return os.time{year=y,month=m,day=d}
+    end
+    return 0
+end
+
+function getEvent(r, db, id)
+    local prep, err = db:prepare(r, "SELECT `title`, `owner`, `description`, `starts`, `ends`, `location`, `closes`, `resolves`, `ofb` FROM `events` WHERE `id` = %u LIMIT 1")
+    local res = prep:select(tonumber(id))
+    local row = res(-1)
+    if row then
+        local event = {}
+        event.id = tonumber(id)
+        event.title = row[1]
+        event.owner = tonumber(row[2])
+        event.description = row[3]
+        event.starts = tonumber(row[4])
+        event.ends = tonumber(row[5])
+        event.location = row[6]
+        event.closes = tonumber(row[7])
+        event.resolves = tonumber(row[8])
+        event.open = tonumber(row[9])
+        return event
+    end
+end
+
+function saveEvent(r, db, event)
+    if event.id and event.id > 0 then
+        local prep = db:prepare(r, "UPDATE `events` SET `title` = %s, `owner` = %u, `description` = %s, `starts` = %u, `ends` = %u, `location` = %s, `closes` = %u, `resolves` = %u, `ofb` = %u WHERE `id` = %u LIMIT 1")
+        prep:query(event.title, event.owner, event.description, event.starts, event.ends, event.location, event.closes, event.resolves, event.open, event.id)
+    elseif event.owner and event.owner > 0 then
+        local prep = db:prepare(r, "INSERT INTO `events` (`owner`, `title`, `description`, `starts`, `ends`, `location`, `closes`, `resolves`) VALUES (%u, %s, %s, %u, %u, %s, %u, %u)")
+        prep:query(event.owner, event.title, event.description, event.starts, event.ends, event.location, event.closes, event.resolves)
+    end
+end
+
+
 function getUser(r, db, id)
     local prep = db:prepare(r, "SELECT `name`, `email`, `fullname` FROM `users` WHERE `id` = %u LIMIT 1")
     local res = prep:select(tonumber(id))
@@ -18,9 +57,44 @@ function getUser(r, db, id)
             usr.id = id
             usr.name = row[1]
             usr.email = row[2]
-            usr.fullname = row[3]
+            usr.fullname = (#row[3] > 0 and row[3]) or row[1]
             return usr
         end
+    end
+end
+
+function getTalkTypes(r, db, event)
+    local types = {}
+    local prep = db:prepare(r, "SELECT `id`,  `title`, `description`, `duration` FROM `talktypes` WHERE `event` = %u")
+    local res = prep:select(tonumber(event))
+    local rows = res(0) or {}
+    for k, row in pairs(rows) do
+        types[tonumber(row[1])] = { title = row[2], description = row[3], duration = tonumber(row[4])}
+    end
+    return types
+end
+
+function getTalk(r, db, tid)
+    local prep = db:prepare(r, "SELECT `event`, `speaker`, `subject`, `type`, `category`, `abstract`, `bio`, `eco`, `audience`, `difficulty`, `requirements`, `approved` FROM `talks` WHERE `id` = %u LIMIT 1")
+    local res = prep:select(tonumber(tid))
+    local row = res(-1)
+    if row then
+        local talk = {
+            id = tonumber(tid),
+            event = tonumber(row[1]),
+            speaker = tonumber(row[2]),
+            subject = row[3],
+            type = tonumber(row[4]),
+            category = row[5] or "*",
+            abstract = row[6] or "(None)",
+            bio = row[7] or "(None)",
+            eco = row[8] or "(None)",
+            audience = row[9] or "(None)",
+            difficulty = tonumber(row[10]),
+            requirements = row[11] or "(None)",
+            approved = tonumber(row[12])
+        }
+        return talk
     end
 end
 
@@ -59,6 +133,7 @@ function getFile(r, filename)
 end
 
 function handle(r)
+    output = ""
     -- Acquire database handle
     local db, err = r:dbacquire("mod_dbd") -- Assume mod_dbd is set up with DB access
     if err then
@@ -77,7 +152,7 @@ function handle(r)
     
     -- Get user data if logged on
     local user = {}
-    local prep, err = db:prepare(r, "SELECT `id`, `name`, `fullname`, `email`, `unread` FROM `users` WHERE `cookie` = %s LIMIT 1")
+    local prep, err = db:prepare(r, "SELECT `id`, `name`, `fullname`, `email`, `unread`, `level` FROM `users` WHERE `cookie` = %s LIMIT 1")
     if err then
         r:warn("Error while preparing statement: " .. err)
         db:close()
@@ -88,10 +163,11 @@ function handle(r)
         local row = res(-1) -- Get the first row
         if row then
             user.loggedOn = true
-            user.id = row[1]
+            user.id = tonumber(row[1])
             user.name = row[2]
             user.fullname = row[3]
             user.unread = tonumber(row[5])
+            user.level = tonumber(row[6])
         end
     end
     
