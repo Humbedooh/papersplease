@@ -187,7 +187,9 @@ else
         local row = res(-1)
         if row then
             local howmany = tonumber(row[1])
-            print( ("<h5>There have been %u edit(s) to this submission. <a href='/cfp/review?event=%u&talk=%u&history=view'>View edit history</a></h5>"):format(howmany, event.id, talk.id))
+            if howmany > 0 then
+                print( ("<h5>There have been %u edit(s) to this submission. <a href='/cfp/review?event=%u&talk=%u&history=view'>View edit history</a></h5>"):format(howmany, event.id, talk.id))
+            end
         end
         
         -- Print out the talk details
